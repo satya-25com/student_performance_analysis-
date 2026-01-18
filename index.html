@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Analytics Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Filter Panel -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="ph-bold ph-graduation-cap"></i>
+                <span>EduAnalytics</span>
+            </div>
+            <div class="filters-container">
+                <p class="filter-title">FILTERS</p>
+                <div class="filter-group">
+                    <label>Academic Year</label>
+                    <select id="yearFilter">
+                        <option value="All">All Years</option>
+                        <option value="2024-25">2024-25</option>
+                        <option value="2023-24">2023-24</option>
+                        <option value="2022-23">2022-23</option>
+                        <option value="2021-22">2021-22</option>
+                        <option value="2020-21">2020-21</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Exam Term</label>
+                    <select id="termFilter">
+                        <option value="All">All Terms</option>
+                        <option value="Unit Test">Unit Test</option>
+                        <option value="Mid Term">Mid Term</option>
+                        <option value="Final">Final</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Class</label>
+                    <select id="classFilter">
+                        <option value="All">All Classes</option>
+                        <option value="10th">10th Grade</option>
+                        <option value="11th">11th Grade</option>
+                        <option value="12th">12th Grade</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Section</label>
+                    <select id="sectionFilter">
+                        <option value="All">All Sections</option>
+                        <option value="A">Section A</option>
+                        <option value="B">Section B</option>
+                        <option value="C">Section C</option>
+                        <option value="D">Section D</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Subject</label>
+                    <select id="subjectFilter">
+                        <option value="All">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="English">English</option>
+                        <option value="Social Studies">Social Studies</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Gender</label>
+                    <select id="genderFilter">
+                        <option value="All">All</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="insight-badge">
+                    <i class="ph ph-lightbulb"></i>
+                    <span>Attendance impacts grades by 15%</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="welcome-text">
+                    <h1>Student Performance Analysis</h1>
+                    <p>Academic Year 2024-25 • Session Insights</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="exportBtn"><i class="ph ph-export"></i> Export Report</button>
+                </div>
+            </header>
+
+            <!-- KPI Section -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon blue"><i class="ph ph-users"></i></div>
+                    <div class="kpi-data">
+                        <span class="label">Total Students</span>
+                        <span class="value" id="totalStudents">1,240</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon purple"><i class="ph ph-chart-line-up"></i></div>
+                    <div class="kpi-data">
+                        <span class="label">Average Percentage</span>
+                        <span class="value" id="avgPercentage">78.4%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon green"><i class="ph ph-check-circle"></i></div>
+                    <div class="kpi-data">
+                        <span class="label">Overall Pass %</span>
+                        <span class="value" id="passPercentage">92.1%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon orange"><i class="ph ph-calendar-check"></i></div>
+                    <div class="kpi-data">
+                        <span class="label">Avg Attendance</span>
+                        <span class="value" id="avgAttendance">85.6%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon cyan"><i class="ph ph-currency-inr"></i></div>
+                    <div class="kpi-data">
+                        <span class="label">Fees Collected</span>
+                        <span class="value" id="feesCollected">₹4.2M</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon red"><i class="ph ph-warning-circle"></i></div>
+                    <div class="kpi-data">
+                        <span class="label">Fees Pending</span>
+                        <span class="value" id="feesPending">₹850K</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Grid -->
+            <section class="charts-grid">
+                <!-- Row 1 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Average Marks by Subject</h3>
+                        <i class="ph ph-info" title="Performance distribution across core subjects"></i>
+                    </div>
+                    <canvas id="subjMarksChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Performance Trend</h3>
+                        <i class="ph ph-info" title="Trend over academic terms"></i>
+                    </div>
+                    <canvas id="perfTrendChart"></canvas>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Gender Distribution</h3>
+                    </div>
+                    <div class="donut-wrapper">
+                        <canvas id="genderDonut"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Fee Collection Status</h3>
+                    </div>
+                    <canvas id="feeStatusChart"></canvas>
+                </div>
+
+                <!-- Row 3 - Complex Visuals -->
+                <div class="chart-box span-2">
+                    <div class="chart-header">
+                        <h3>Class vs Subject Performance (Heatmap)</h3>
+                    </div>
+                    <div id="heatmapContainer" class="heatmap-grid">
+                        <!-- Heatmap generated by JS -->
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Attendance vs Performance</h3>
+                    </div>
+                    <canvas id="scatterChart"></canvas>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Pass vs Fail Ratio</h3>
+                    </div>
+                    <canvas id="passFailDonut"></canvas>
+                </div>
+
+                <!-- Ranking and Table Section -->
+                <div class="chart-box span-2">
+                    <div class="chart-header">
+                        <h3>Top 10 Performing Students</h3>
+                    </div>
+                    <canvas id="topStudentsChart"></canvas>
+                </div>
+            </section>
+
+            <section class="data-section">
+                <div class="section-header">
+                    <h3>Student Performance Directory</h3>
+                    <div class="table-actions">
+                        <input type="text" placeholder="Search student name..." id="studentSearch">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Attendance %</th>
+                                <th>Obtained Marks</th>
+                                <th>Percentage</th>
+                                <th>Fee Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <!-- Student Detail Modal -->
+    <div id="studentModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Student Profile</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <!-- Data injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
